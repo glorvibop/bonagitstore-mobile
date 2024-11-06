@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class MyHomePage extends StatelessWidget {
   MyHomePage({super.key});
-  final String npm = '2306245573'; // NPM
+  final String npm = '2306245573';              // NPM
   final String name = 'Shaine Glorvina Mathea'; // Nama
-  final String className = 'PBP B'; // Kelas
+  final String className = 'PBP B';             // Kelas
   final List<ItemHomepage> items = [
     ItemHomepage("Lihat Daftar Produk", Icons.shopping_bag),
     ItemHomepage("Tambah Produk", Icons.add),
@@ -57,7 +57,7 @@ class MyHomePage extends StatelessWidget {
                   const Padding(
                     padding: EdgeInsets.only(top: 16.0),
                     child: Text(
-                      'Welcome to Bonagit Store',
+                      'Welcome to Bonagit Store!',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 18.0,
@@ -82,13 +82,13 @@ class MyHomePage extends StatelessWidget {
                       Color color;
                       switch (index) {
                         case 0:
-                          color = Colors.lightBlue.shade200;
+                          color = Colors.brown.shade400;
                           break;
                         case 1:
-                          color = Colors.red.shade100;
+                          color = Colors.indigo.shade900;
                           break;
                         case 2:
-                          color = Colors.purple.shade100;
+                          color = const Color.fromARGB(255, 123, 9, 21);
                           break;
                         default:
                           color = Colors.indigo.shade900;
