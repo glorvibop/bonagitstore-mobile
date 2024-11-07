@@ -54,7 +54,7 @@ Fungsi `setState()` digunakan untuk memberitahu framework bahwa ada perubahan pa
 Variabel yang terdampak adalah semua variabel yang dideklarasikan dalam objek `State` yang digunakan di dalam metode `build()` untuk menentukan tampilan widget.
 
 ### 4. Jelaskan perbedaan antara `const` dengan `final`.
-- `const` digunakan untuk mendeklarasikan nilai yang bersifat konstan, harus diketahui saat compile-time, dan berlaku secara immutabel di seluruh aplikasi. Objek `const` tidak dapat berubah dan lebih efisien karena diinisialisasi sebagai objek yang di-cache.
+- `const` digunakan untuk mendeklarasikan nilai yang bersifat konstan, harus diketahui saat compile-time, dan berlaku secara immutable di seluruh aplikasi. Objek `const` tidak dapat berubah dan lebih efisien karena diinisialisasi sebagai objek yang di-cache.
 - `final` digunakan untuk variabel yang hanya dapat diinisialisasi sekali. Nilai dari variabel `final` tidak dapat diubah setelah diinisialisasi, tetapi nilai ini bisa ditentukan saat runtime.
 
 ### 5. Jelaskan bagaimana cara kamu mengimplementasikan _checklist-checklist_ di atas.
@@ -73,23 +73,6 @@ class ItemHomepage {
 }
 ```
 
-Tentu, berikut ini adalah parafrase dari langkah-langkah implementasi proyek Anda:
-
-Pertama, saya membuat proyek Flutter baru dengan nama bonagit_store di lokal menggunakan perintah flutter create bonagit_store, lalu saya masuk ke direktori proyek tersebut dengan menjalankan cd bonagit_store. Aplikasi ini bertema e-commerce sesuai dengan tugas-tugas yang telah saya kerjakan sebelumnya.
-
-Selanjutnya, saya menambahkan file baru bernama menu.dart di dalam folder lib dan melakukan penataan kode agar lebih terstruktur dan rapi, mengikuti panduan yang sudah dipelajari.
-
-Setelah itu, saya mulai membuat tiga tombol sederhana dengan ikon dan teks, yaitu Lihat Daftar Produk, Tambah Produk, dan Logout. Sebelumnya, saya mendefinisikan kelas ItemHomepage untuk menyimpan informasi tiap tombol. Kelas ItemHomepage ini berisi nama, ikon, dan warna yang akan digunakan oleh masing-masing tombol, dengan format berikut:
-
-dart
-Copy code
-class ItemHomepage {
-  final String name;
-  final IconData icon;
-  final Color color;
-
-  ItemHomepage(this.name, this.icon, this.color);
-}
 Kemudian, saya membuat daftar items di dalam `MyHomePage` yang terdiri dari tiga objek `ItemHomepage`, masing-masing dengan ikon dan warna yang telah ditentukan untuk setiap tombol, seperti ini:
 ```
   final List<ItemHomepage> items = [
@@ -111,4 +94,78 @@ onTap: () {
         },
 ```
 Terakhir, saya menampilkan tombol-tombol tersebut dalam `GridView` di dalam `MyHomePage`, sehingga `ItemCard` dapat ditampilkan dalam tata letak berbentuk grid.
+</details>
+
+<details>
+<summary>
+  <span style="font-size:16px;"><b>Tugas 8: Flutter Navigation, Layouts, Forms, and Input Elements</b></span>
+</summary>
+
+### 1. Apa kegunaan `const` di Flutter? Jelaskan apa keuntungan ketika menggunakan `const` pada kode Flutter. Kapan sebaiknya kita menggunakan `const`, dan kapan sebaiknya tidak digunakan?
+`const` digunakan untuk membuat objek atau variabel yang bersifat immutable dan dihitung pada waktu kompilasi. Objek yang dibuat menggunakan const tidak dapat diubah setelah didefinisikan.
+
+- Keuntungan Menggunakan `const`:
+  - Objek `const` disimpan di memori hanya sekali, sehingga mengurangi alokasi memori saat aplikasi berjalan. Ini meningkatkan efisiensi memori dan performa aplikasi.
+  - Karena objek dihitung saat waktu kompilasi, aplikasi berjalan lebih cepat karena tidak perlu membuat ulang objek tersebut setiap kali widget di-render.
+  - Menggunakan `const` menunjukkan dengan jelas bahwa sebuah objek tidak akan berubah, membuat kode lebih mudah dipahami.
+
+Kita sebaiknya menggunakan `const` untuk widget atau objek yang tidak berubah selama runtime aplikasi. Misalnya, ketika mendefinisikan teks, padding, atau ikon yang bersifat tetap. Contoh penggunaan const yang tepat berdasarkan proyek ini adalah:
+```
+...
+     appBar: AppBar(
+        title: const Text(
+          'Bonagit Store',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
+...
+```
+
+Pada kode di atas, `const` digunakan pada `Text` dan `IconThemeData` karena teks "Bonagit Store" dan ikon warna putih tidak akan berubah selama aplikasi berjalan. Sebaliknysa, `const` tidak disarankan jika widget atau objek memerlukan data dinamis yang dapat berubah selama runtime, seperti data yang diperoleh dari API atau masukan pengguna, contohnya seperti `TextFormField` pada `chocolate_card.dart`
+
+### 2. Jelaskan dan bandingkan penggunaan _Column_ dan _Row_ pada Flutter. Berikan contoh implementasi dari masing-masing layout widget ini!
+Kita dapat memanfaatkan widget _Column_ dan _Row_ untuk mengatur tata letak widget.
+- `Column`: Menyusun widget secara vertikal. Di proyek ini, `Column` digunakan pada `Form Page` untuk menyusun elemen-elemen pada halaman formulir sehingga elemen input dan tombol tersusun rapi dalam satu arah vertikal:
+```
+...
+child: Column(
+  crossAxisAlignment: CrossAxisAlignment.start,
+  children: [
+    Text('Name: $_name'),
+    Text('Price: $_price'),
+    Text('Description: $_description'),
+    Text('Type: $_type'),
+    Text('Cocoa Ratio: $_cocoaRatio'),
+    Text('Amount: $_amount'),
+  ],
+),
+...
+```
+- `Row`: Menyusun widget secara horizontal. Di proyek ini, `Row` digunakan untuk menampilkan tiga kartu informasi (NPM, Nama, Kelas) secara sejajar:
+```
+...
+Row(
+  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  children: [
+    InfoCard(title: 'NPM', content: npm),
+    InfoCard(title: 'Name', content: name),
+    InfoCard(title: 'Class', content: className),
+  ],
+),
+...
+```
+
+### 3.  Sebutkan apa saja elemen input yang kamu gunakan pada halaman _form_ yang kamu buat pada tugas kali ini. Apakah terdapat elemen input Flutter lain yang tidak kamu gunakan pada tugas ini? Jelaskan!
+Pada halaman form di `chocolateentry_form.dart`, saya menggunakan `TextFormField` untuk menangani input data seperti *name*, *price*, *description*, *type*, *cocoa ratio*, dan *amount*, dengan validasi di setiap elemen. Pemilihan `TextFormField` memungkinkan fleksibilitas untuk input teks dan angka, serta memastikan data yang dimasukkan sesuai format yang diharapkan melalui validasi yang mencegah kesalahan input. Namun, terdapat beberapa elemen input Flutter yang tidak saya gunakan untuk proyek ini seperti `DropdownButtonFormField`, `Checkbox`, `Radio`, `Slider`, dan lain lain. Elemen-elemen tersebut tidak relevan dengan kebutuhan form ini, yang hanya memerlukan input teks dan angka.
+
+### 4. Bagaimana cara kamu mengatur tema (theme) dalam aplikasi Flutter agar aplikasi yang dibuat konsisten? Apakah kamu mengimplementasikan tema pada aplikasi yang kamu buat?
+Di file `main.dart`, saya mengatur tema (theme) aplikasi menggunakan `ThemeData` dalam widget `MaterialApp` pada properti `theme`. Saya menerapkan `colorScheme` dengan menggunakan `ColorScheme.fromSeed` dan memilih warna utama `Colors.deepPurple`, serta mengaktifkan `useMaterial3`. Dengan cara ini, saya memastikan bahwa aplikasi memiliki tema yang konsisten di seluruh bagian, sehingga tampilannya tetap seragam dan terorganisir.
+
+### 5. Bagaimana cara kamu menangani navigasi dalam aplikasi dengan banyak halaman pada Flutter?
+Dalam proyek ini, saya menangani navigasi antar halaman menggunakan widget `Navigator`. Saya memanfaatkan fungsi seperti `Navigator.push()` untuk menambahkan halaman baru ke tumpukan dan `Navigator.pop()` untuk kembali ke halaman sebelumnya. Selain itu, saya menggunakan `Navigator.pushReplacement()` saat ingin mengganti halaman yang sedang ditampilkan tanpa menambahkannya ke tumpukan. Untuk mempermudah navigasi, saya juga menambahkan sebuah drawer yang memudahkan pengguna berpindah antara halaman utama dan halaman form. Tombol pada halaman utama diimplementasikan dengan `Navigator` untuk mengarahkan pengguna ke halaman form saat tombol tersebut ditekan.
 </details>
