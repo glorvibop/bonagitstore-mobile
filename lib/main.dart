@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:bonagit_store/menu.dart';
+import 'package:bonagit_store/screens/menu.dart';
 
 void main() {
   runApp(const MyApp());
