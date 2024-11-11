@@ -56,7 +56,7 @@ class _ProductEntryFormPageState extends State<ProductEntryFormPage> {
                     },
                     validator: (String? value) {
                       if (value == null || value.isEmpty) {
-                        return "Name tidak boleh kosong!";
+                        return "Product can't be null!";
                       }
                       return null;
                     },
@@ -68,7 +68,7 @@ class _ProductEntryFormPageState extends State<ProductEntryFormPage> {
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: TextFormField(
                     decoration: InputDecoration(
-                      hintText: "Price",
+                      hintText: "Price (Dollars)",
                       labelText: "Price",
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5.0),
@@ -81,8 +81,8 @@ class _ProductEntryFormPageState extends State<ProductEntryFormPage> {
                       });
                     },
                     validator: (String? value) {
-                      if (value == null || value.isEmpty || int.tryParse(value) == null) {
-                        return "Price harus berupa angka!";
+                      if (value == null || value.isEmpty || int.tryParse(value)! < 1 || int.tryParse(value) == null) {
+                        return "Price can't be null and must be more than 1!";
                       }
                       return null;
                     },
@@ -107,7 +107,7 @@ class _ProductEntryFormPageState extends State<ProductEntryFormPage> {
                     },
                     validator: (String? value) {
                       if (value == null || value.isEmpty) {
-                        return "Description tidak boleh kosong!";
+                        return "Description can't be null!";
                       }
                       return null;
                     },
@@ -132,7 +132,7 @@ class _ProductEntryFormPageState extends State<ProductEntryFormPage> {
                     },
                     validator: (String? value) {
                       if (value == null || value.isEmpty) {
-                        return "Type tidak boleh kosong!";
+                        return "Type can't be null!";
                       }
                       return null;
                     },
@@ -144,7 +144,7 @@ class _ProductEntryFormPageState extends State<ProductEntryFormPage> {
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: TextFormField(
                     decoration: InputDecoration(
-                      hintText: "Cocoa Ratio",
+                      hintText: "Cocoa Ratio (%)",
                       labelText: "Cocoa Ratio",
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5.0),
@@ -157,8 +157,8 @@ class _ProductEntryFormPageState extends State<ProductEntryFormPage> {
                       });
                     },
                     validator: (String? value) {
-                      if (value == null || value.isEmpty || int.tryParse(value) == null) {
-                        return "Cocoa Ratio harus berupa angka!";
+                      if (value == null || value.isEmpty || int.tryParse(value)! < 1 || int.tryParse(value) == null) {
+                        return "Cocoa Ratio can't be null and must be more than 1!";
                       }
                       return null;
                     },
@@ -183,8 +183,8 @@ class _ProductEntryFormPageState extends State<ProductEntryFormPage> {
                       });
                     },
                     validator: (String? value) {
-                      if (value == null || value.isEmpty || int.tryParse(value) == null) {
-                        return "Amount harus berupa angka!";
+                      if (value == null || value.isEmpty || int.tryParse(value)! < 1 || int.tryParse(value) == null) {
+                        return "Amount can't be null and must be more than 1!";
                       }
                       return null;
                     },
@@ -204,7 +204,7 @@ class _ProductEntryFormPageState extends State<ProductEntryFormPage> {
                             context: context,
                             builder: (context) {
                               return AlertDialog(
-                                title: const Text('Produk berhasil disimpan'),
+                                title: const Text('Product is saved!'),
                                 content: SingleChildScrollView(
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
