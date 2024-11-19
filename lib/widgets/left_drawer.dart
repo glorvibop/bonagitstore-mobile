@@ -1,3 +1,4 @@
+import 'package:bonagit_store/screens/list_productentry.dart';
 import 'package:flutter/material.dart';
 import 'package:bonagit_store/screens/menu.dart';
 import 'package:bonagit_store/screens/chocolateentry_form.dart';
@@ -58,10 +59,21 @@ class LeftDrawer extends StatelessWidget {
                 Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const ProductEntryFormPage(),
+                  builder: (context) => const ChocolateentryForm(),
                 ));
               },
             ),
+            ListTile(
+              leading: const Icon(Icons.food_bank),
+              title: const Text('Lihat Daftar Chocolate'),
+              onTap: () {
+                  // Route menu ke halaman chocolate entry
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const ChocolateProductPage()),
+                  );
+              },
+          ),
         ],
       ),
     );

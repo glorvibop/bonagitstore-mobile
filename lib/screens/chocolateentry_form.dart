@@ -1,29 +1,33 @@
+import 'dart:convert';
+import 'package:bonagit_store/screens/menu.dart';
 import 'package:flutter/material.dart';
 import 'package:bonagit_store/widgets/left_drawer.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
 
-class ProductEntryFormPage extends StatefulWidget {
-  const ProductEntryFormPage({super.key});
+class ChocolateentryForm extends StatefulWidget {
+  const ChocolateentryForm({super.key});
 
   @override
-  State<ProductEntryFormPage> createState() => _ProductEntryFormPageState();
+  State<ChocolateentryForm> createState() => _ChocolateEntryFormPageState();
 }
 
-class _ProductEntryFormPageState extends State<ProductEntryFormPage> {
+class _ChocolateEntryFormPageState extends State<ChocolateentryForm> {
   final _formKey = GlobalKey<FormState>();
   String _name = "";
   int _price = 0;
   String _description = "";
   String _type = "";
   int _cocoaRatio = 0;
-  int _amount = 0;
 
   @override
   Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
     return Scaffold(
       appBar: AppBar(
         title: const Center(
           child: Text(
-            'Form Tambah Produk Chocolate',
+            'Tambah Produk Chocolate',
           ),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
@@ -33,211 +37,192 @@ class _ProductEntryFormPageState extends State<ProductEntryFormPage> {
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Input field for Name
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      hintText: "Name",
-                      labelText: "Name",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
+          child: Column(
+            children: [
+              // Input field for Name
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    hintText: "Name",
+                    labelText: "Name",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5.0),
                     ),
-                    onChanged: (String? value) {
-                      setState(() {
-                        _name = value!;
-                      });
-                    },
-                    validator: (String? value) {
-                      if (value == null || value.isEmpty) {
-                        return "Product can't be null!";
-                      }
-                      return null;
-                    },
                   ),
+                  onChanged: (String? value) {
+                    setState(() {
+                      _name = value ?? ""; // Default to an empty string
+                    });
+                  },
+                  validator: (String? value) {
+                    if (value == null || value.isEmpty) {
+                      return "Product name can't be null!";
+                    }
+                    return null;
+                  },
                 ),
-                
-                // Input field for Price
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      hintText: "Price (Dollars)",
-                      labelText: "Price",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
-                    ),
-                    keyboardType: TextInputType.number,
-                    onChanged: (String? value) {
-                      setState(() {
-                        _price = int.tryParse(value ?? '0')!;
-                      });
-                    },
-                    validator: (String? value) {
-                      if (value == null || value.isEmpty || int.tryParse(value)! < 1 || int.tryParse(value) == null) {
-                        return "Price can't be null and must be more than 1!";
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                
-                // Input field for Description
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      hintText: "Description",
-                      labelText: "Description",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
-                    ),
-                    onChanged: (String? value) {
-                      setState(() {
-                        _description = value!;
-                      });
-                    },
-                    validator: (String? value) {
-                      if (value == null || value.isEmpty) {
-                        return "Description can't be null!";
-                      }
-                      return null;
-                    },
-                  ),
-                ),
+              ),
 
-                // Input field for Type
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      hintText: "Type",
-                      labelText: "Type",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0),
+              // Input field for Price
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    hintText: "Price (Dollars)",
+                    labelText: "Price",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                  ),
+                  keyboardType: TextInputType.number,
+                  onChanged: (String? value) {
+                    setState(() {
+                      _price = int.tryParse(value ?? '0') ?? 0; // Safely parse
+                    });
+                  },
+                  validator: (String? value) {
+                    final parsedValue = int.tryParse(value ?? '');
+                    if (parsedValue == null || parsedValue < 1) {
+                      return "Price must be a valid number greater than 0!";
+                    }
+                    return null;
+                  },
+                ),
+              ),
+
+              // Input field for Description
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    hintText: "Description",
+                    labelText: "Description",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                  ),
+                  onChanged: (String? value) {
+                    setState(() {
+                      _description = value ?? ""; // Default to empty string
+                    });
+                  },
+                  validator: (String? value) {
+                    if (value == null || value.isEmpty) {
+                      return "Description can't be null!";
+                    }
+                    return null;
+                  },
+                ),
+              ),
+
+              // Input field for Type
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    hintText: "Type",
+                    labelText: "Type",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                  ),
+                  onChanged: (String? value) {
+                    setState(() {
+                      _type = value ?? ""; // Default to empty string
+                    });
+                  },
+                  validator: (String? value) {
+                    if (value == null || value.isEmpty) {
+                      return "Type can't be null!";
+                    }
+                    return null;
+                  },
+                ),
+              ),
+
+              // Input field for Cocoa Ratio
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    hintText: "Cocoa Ratio (%)",
+                    labelText: "Cocoa Ratio",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                  ),
+                  keyboardType: TextInputType.number,
+                  onChanged: (String? value) {
+                    setState(() {
+                      _cocoaRatio = int.tryParse(value ?? '0') ?? 0; // Safely parse
+                    });
+                  },
+                  validator: (String? value) {
+                    final parsedValue = int.tryParse(value ?? '');
+                    if (parsedValue == null || parsedValue < 1) {
+                      return "Cocoa Ratio must be a valid number greater than 0!";
+                    }
+                    return null;
+                  },
+                ),
+              ),
+
+              // Save Button
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(
+                        Theme.of(context).colorScheme.primary,
                       ),
                     ),
-                    onChanged: (String? value) {
-                      setState(() {
-                        _type = value!;
-                      });
-                    },
-                    validator: (String? value) {
-                      if (value == null || value.isEmpty) {
-                        return "Type can't be null!";
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-
-                // Input field for Cocoa Ratio
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      hintText: "Cocoa Ratio (%)",
-                      labelText: "Cocoa Ratio",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
-                    ),
-                    keyboardType: TextInputType.number,
-                    onChanged: (String? value) {
-                      setState(() {
-                        _cocoaRatio = int.tryParse(value ?? '0')!;
-                      });
-                    },
-                    validator: (String? value) {
-                      if (value == null || value.isEmpty || int.tryParse(value)! < 1 || int.tryParse(value) == null) {
-                        return "Cocoa Ratio can't be null and must be more than 1!";
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-
-                // Input field for Amount
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      hintText: "Amount",
-                      labelText: "Amount",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
-                    ),
-                    keyboardType: TextInputType.number,
-                    onChanged: (String? value) {
-                      setState(() {
-                        _amount = int.tryParse(value ?? '0')!;
-                      });
-                    },
-                    validator: (String? value) {
-                      if (value == null || value.isEmpty || int.tryParse(value)! < 1 || int.tryParse(value) == null) {
-                        return "Amount can't be null and must be more than 1!";
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-
-                // Submit Button with alignment
-                Align(
-                  alignment: Alignment.center,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          // Show dialog on successful validation
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: const Text('Product is saved!'),
-                                content: SingleChildScrollView(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text('Name: $_name'),
-                                      Text('Price: $_price'),
-                                      Text('Description: $_description'),
-                                      Text('Type: $_type'),
-                                      Text('Cocoa Ratio: $_cocoaRatio'),
-                                      Text('Amount: $_amount'),
-                                    ],
-                                  ),
-                                ),
-                                actions: [
-                                  TextButton(
-                                    child: const Text('OK'),
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      _formKey.currentState!.reset();
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
-                          );
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        // Send data to Django and wait for the response
+                        final response = await request.postJson(
+                       
+                          "http://127.0.0.1:8000/create-flutter/",
+                            jsonEncode(<String, dynamic>{
+                            'product_name': _name,
+                            'price': _price.toString(),
+                            'description': _description,
+                            'type': _type,
+                            'cocoa_ratio': _cocoaRatio.toString(),
+                          }),
+                        );
+                        if (context.mounted) {
+                          if (response['status'] == 'success') {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content:
+                                  Text("Product baru berhasil disimpan!"),
+                            ));
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MyHomePage()),
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text(
+                                  "Terdapat kesalahan, silakan coba lagi."),
+                            ));
+                          }
                         }
-                      },
-                      child: const Text("Save", style: TextStyle(color: Colors.black)),
+                      }
+                    },
+                    child: const Text(
+                      "Save",
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

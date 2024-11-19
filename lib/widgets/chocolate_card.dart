@@ -1,3 +1,5 @@
+import 'package:bonagit_store/screens/list_productentry.dart';
+import 'package:bonagit_store/screens/login.dart';
 import 'package:flutter/material.dart';
 import 'package:bonagit_store/screens/chocolateentry_form.dart'; 
 
@@ -32,7 +34,22 @@ class ItemCard extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const ProductEntryFormPage(),
+                builder: (context) => const ChocolateentryForm(),
+              ),
+            );
+          }
+          else if (item.name == "Lihat Daftar Chocolate") {
+            Navigator.push(context,
+                MaterialPageRoute(
+                    builder: (context) => const ChocolateProductPage()
+                ),
+            );
+          }
+          else if (item.name == "Logout") {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const LoginPage(),
               ),
             );
           }
