@@ -208,4 +208,4 @@ Untuk mengelola data yang diambil dari Django, saya membuat model kustom. Saya m
 Saya membuat halaman detail product (`product_detail.dart`) yang memuat informasi lengkap tentang product tertentu, seperti name, price, (chocolate) type, description, dan cocoa ratio. Data untuk halaman ini diambil dari server Django dengan fungsi `fetchProductDetail`, yang mengirimkan permintaan GET ke endpoint spesifik berdasarkan ID. Saya memastikan setiap product pada halaman daftar product dapat ditekan untuk membuka halaman detail menggunakan `Navigator.push`, dan halaman detail memiliki tombol back untuk kembali ke daftar.
 
 Untuk memungkinkan pengguna menambahkan produk baru, saya membuat form di `chocolateentry_form.dart` dan menghubungkannya ke fungsi `create_product_flutter` di `views.py` Django. Data form dikirim ke server dan ditampilkan kembali di daftar produk. Terakhir, saya menambahkan fitur logout, di mana saya mengimplementasikan fungsi logout di Django dan menyesuaikan Flutter untuk menghapus sesi pengguna, mengarahkan pengguna kembali ke halaman login, dan menampilkan pesan sukses logout.
-</details>s
+</details>
