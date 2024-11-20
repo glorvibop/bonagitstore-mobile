@@ -39,9 +39,9 @@ Perbedaan antara kedua widgets adalah stateless widget mudah dipahami tetapi mem
 - `Row`: Menyusun widget secara horizontal. Di proyek ini, `Row` digunakan untuk menampilkan tiga kartu informasi (NPM, Nama, Kelas) secara sejajar.
 - `Card`: Menampilkan kotak dengan shadow untuk elemen informasi.
 - `Container`: Widget serbaguna untuk mengatur tata letak, padding, margin, dan dekorasi. Dalam proyek ini, `Container` digunakan di dalam `Card` untuk mengatur padding dan ukuran elemen.
-- `GridView.count`: Membuat grid yang digunakan untuk menampilkan elemen dalam layout grid. Di proyek ini, `GridView.count` digunakan untuk menampilkan tiga tombol (Lihat Daftar Produk, Tambah Produk, Logout) dalam tata letak grid 3 kolom.
+- `GridView.count`: Membuat grid yang digunakan untuk menampilkan elemen dalam layout grid. Di proyek ini, `GridView.count` digunakan untuk menampilkan tiga tombol (Lihat Daftar Chocolate, Tambah Produk, Logout) dalam tata letak grid 3 kolom.
 - `InkWell`: Memberikan efek sentuhan interaktif pada `ItemCard`. Ketika pengguna mengetuk tombol, `InkWell` memberikan efek animasi dan men-trigger aksi seperti menampilkan `SnackBar`.
-- `SnackBar`: Menampilkan notifikasi sementara di bagian bawah layar ketika tombol ditekan, seperti pesan "Kamu telah menekan tombol Lihat Daftar Produk".
+- `SnackBar`: Menampilkan notifikasi sementara di bagian bawah layar ketika tombol ditekan, seperti pesan "Kamu telah menekan tombol Lihat Daftar Chocolate".
 - `Icon`: Menampilkan ikon di dalam widget.
 - `Text`: Menampilkan teks.
 - `Center`: Widget untuk memposisikan child di tengah-tengah parent.
@@ -62,7 +62,7 @@ Pertama, saya membuat proyek Flutter baru dengan nama bonagit_store di lokal men
 
 Selanjutnya, saya menambahkan file baru bernama `menu.dart` di dalam folder `lib` dan melakukan penataan kode agar lebih terstruktur dan rapi, mengikuti Tutorial 6 yang sudah dipelajari.
 
-Setelah itu, saya mulai membuat tiga tombol sederhana dengan ikon dan teks, yaitu `Lihat Daftar Produk`, `Tambah Produk`, dan `Logout`. Sebelumnya, saya mendefinisikan kelas `ItemHomepage` untuk menyimpan informasi tiap tombol. Kelas `ItemHomepage` ini berisi nama, ikon, dan warna yang akan digunakan oleh masing-masing tombol, dengan format berikut:
+Setelah itu, saya mulai membuat tiga tombol sederhana dengan ikon dan teks, yaitu `Lihat Daftar Chocolate`, `Tambah Chocolate`, dan `Logout`. Sebelumnya, saya mendefinisikan kelas `ItemHomepage` untuk menyimpan informasi tiap tombol. Kelas `ItemHomepage` ini berisi nama, ikon, dan warna yang akan digunakan oleh masing-masing tombol, dengan format berikut:
 ```
 class ItemHomepage {
   final String name;
@@ -76,9 +76,9 @@ class ItemHomepage {
 Kemudian, saya membuat daftar items di dalam `MyHomePage` yang terdiri dari tiga objek `ItemHomepage`, masing-masing dengan ikon dan warna yang telah ditentukan untuk setiap tombol, seperti ini:
 ```
   final List<ItemHomepage> items = [
-    ItemHomepage("Lihat Daftar Produk", Icons.shopping_bag),
-    ItemHomepage("Tambah Produk", Icons.add),
-    ItemHomepage("Logout", Icons.logout),
+    ItemHomepage("Lihat Daftar Chocolate", Icons.food_bank, const Color.fromARGB(255, 102, 67, 31)),
+    ItemHomepage("Tambah Chocolate", Icons.add, const Color.fromARGB(255, 30, 32, 147)),
+    ItemHomepage("Logout", Icons.logout, const Color.fromARGB(255, 123, 9, 21)),
   ];
 ```
 Selanjutnya, saya membuat widget stateless bernama `ItemCard` yang akan menerima satu objek `ItemHomepage` sebagai parameter dan menampilkannya sebagai tombol pada layar.
@@ -199,4 +199,13 @@ Pengguna memasukkan `username` dan `password` di aplikasi Flutter, lalu data ter
 Pengguna memasukkan `username`, `password`, dan confirm `password`, kemudian data ini dikirim ke endpoint `register/` di Django dengan metode POST. Server Django memeriksa apakah `username` sudah terdaftar dan memastikan `password` yang dimasukkan cocok. Lalu, server Django akan membuat pengguna baru jika valid. Setelah itu, Django mengembalikan response JSON yang menginformasikan apakah registrasi berhasil atau gagal, dan Flutter menampilkan hasilnya kepada pengguna.
 
 ### 6. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step! (bukan hanya sekadar mengikuti tutorial).
-</details>
+Pertama, saya mengimplementasikan fitur registrasi akun di Flutter dengan memulai dari proyek Django. Saya membuat aplikasi baru bernama `authentication` dalam proyek Django saya (Bonagit Store), lalu mengatur semua konfigurasi yang diperlukan, seperti menambahkan authentication ke `INSTALLED_APPS` di `settings`.py, menginstal `django-cors-headers`, dan memperbarui `requirements.txt`. Saya juga menambahkan middleware CORS untuk memungkinkan komunikasi antara aplikasi Flutter dan Django. Setelah itu, saya membuat method `login` dan register di `views.py `pada aplikasi `authentication`, dengan routing diatur pada `urls.py.`
+
+Setelah konfigurasi Django selesai, saya beralih ke aplikasi Flutter dan menambahkan dependensi provider dan `pbp_django_auth` untuk memfasilitasi autentikasi. Saya memodifikasi `main.dart` untuk membagikan _instance_ `CookieRequest` ke seluruh widget aplikasi menggunakan `Provider`. Kemudian, saya membuat file `login.dart` di folder `screens` untuk menampilkan halaman login, yang berisi formulir input untuk username dan password. Tombol login dikonfigurasi untuk mengirim data ke server Django dan menampilkan pesan sukses atau error menggunakan `ScaffoldMessenger`. Selanjutnya, saya menambahkan halaman registrasi (`register.dart`) yang memungkinkan pengguna baru membuat akun, dengan permintaan data yang dikirim ke endpoint registrasi Django.
+
+Untuk mengelola data yang diambil dari Django, saya membuat model kustom. Saya membuka situs web Quicktype untuk mengonversi JSON dari endpoint Django ke dalam kode model Dart yang saya simpan di folder `models` sebagai `chocolate_entry.dart` Model ini digunakan untuk memetakan properti data seperti name, price, description, dan lainnya. Untuk menampilkan daftar product, saya membuat file `list_productentry.dart` di `screens` dan menambahkan kode untuk melakukan permintaan GET menggunakan `CookieRequest`. Saya memastikan halaman daftar product ini hanya menampilkan product milik pengguna yang sedang login. Setiap product dapat ditekan, membuka halaman detail product yang memuat informasi tambahan seperti type chocolate dan cocoa ratio.
+
+Saya membuat halaman detail product (`product_detail.dart`) yang memuat informasi lengkap tentang product tertentu, seperti name, price, (chocolate) type, description, dan cocoa ratio. Data untuk halaman ini diambil dari server Django dengan fungsi `fetchProductDetail`, yang mengirimkan permintaan GET ke endpoint spesifik berdasarkan ID. Saya memastikan setiap product pada halaman daftar product dapat ditekan untuk membuka halaman detail menggunakan `Navigator.push`, dan halaman detail memiliki tombol back untuk kembali ke daftar.
+
+Untuk memungkinkan pengguna menambahkan produk baru, saya membuat form di `chocolateentry_form.dart` dan menghubungkannya ke fungsi `create_product_flutter` di `views.py` Django. Data form dikirim ke server dan ditampilkan kembali di daftar produk. Terakhir, saya menambahkan fitur logout, di mana saya mengimplementasikan fungsi logout di Django dan menyesuaikan Flutter untuk menghapus sesi pengguna, mengarahkan pengguna kembali ke halaman login, dan menampilkan pesan sukses logout.
+</details>s

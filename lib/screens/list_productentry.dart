@@ -1,3 +1,4 @@
+import 'package:bonagit_store/screens/product_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:bonagit_store/models/chocolate_entry.dart';
 import 'package:bonagit_store/widgets/left_drawer.dart';
@@ -33,7 +34,7 @@ class _ChocolateProductPageState extends State<ChocolateProductPage> {
     final request = context.watch<CookieRequest>();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Product Entry List'),
+        title: const Text('Lihat Daftar Chocolate'),
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Colors.white,
       ),
@@ -81,6 +82,15 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      onTap: () {
+        // Navigate to ProductDetailPage with the product's ID
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductDetailPage(productID: product.pk),
+          ),
+        );
+      },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         padding: const EdgeInsets.all(16),

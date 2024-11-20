@@ -27,7 +27,7 @@ class _ChocolateEntryFormPageState extends State<ChocolateentryForm> {
       appBar: AppBar(
         title: const Center(
           child: Text(
-            'Tambah Produk Chocolate',
+            'Tambah Chocolate',
           ),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
